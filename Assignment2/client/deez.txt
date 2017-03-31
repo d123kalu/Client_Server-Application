@@ -1,0 +1,8 @@
+Hello,
+
+Firstly, sorry for my bad English.
+I have a question to ask you, I try to create a simply application in JavaFX that use property and binding.
+I reduce my application at the minimal for show you my problem.
+
+I would like to put a red rectangle at the middle of borderPane, this rectangle is into an HBox (I think the problem is here) and i would like that rectangle grow up or reduce in the same time that is container (the HBox).
+This is my code : 

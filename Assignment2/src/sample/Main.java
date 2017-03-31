@@ -66,10 +66,11 @@ public class Main extends Application {
 
                 try {
                     Socket sock = new Socket("127.0.0.1", 8080);
-                    //out.println("Download");
                     byte[] mybytearray = new byte[1024];
                     InputStream is = sock.getInputStream();
                     String name = selectedItem;
+                    PrintStream out = new PrintStream(sock.getOutputStream());
+                    out.println("download");
                     out.println(name);
                     FileOutputStream fos = new FileOutputStream("//home//dikachi//Desktop//Assignment2//client//" + name);
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
@@ -91,24 +92,29 @@ public class Main extends Application {
         upload.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                out.println("upload");
+
                 ObservableList<String> fileNamesS = FXCollections.observableArrayList();
                 String selectedItem = sharedFolderLocal.getSelectionModel().getSelectedItem();
                 fileNamesS.add(selectedItem);
                 sharedFolderServer.getItems().addAll(fileNamesS);
-
                 try {
-                    ServerSocket servsock = new ServerSocket(8080);
-                    File myFile = new File(selectedItem);
+
+                    Socket sock = new Socket("127.0.0.1", 8080);
+                    PrintStream out = new PrintStream(sock.getOutputStream());
+                    out.println("upload");
+                    out.println(selectedItem);
+
+                    ServerSocket m_ServerSocket = new ServerSocket(8080);
+                    Socket clientSocket = m_ServerSocket.accept();
+                    File myFile = new File("//home//dikachi//Desktop//Assignment2//client//" + selectedItem);
                     while (true) {
-                        Socket sock = servsock.accept();
                         byte[] mybytearray = new byte[(int) myFile.length()];
                         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
                         bis.read(mybytearray, 0, mybytearray.length);
-                        OutputStream os = sock.getOutputStream();
+                        OutputStream os = clientSocket.getOutputStream();
                         os.write(mybytearray, 0, mybytearray.length);
                         os.flush();
-                        sock.close();
+
                     }
                 } catch (Exception e) {
                     out.println("DIDNT WORK");
