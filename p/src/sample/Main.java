@@ -35,20 +35,28 @@ class ClientServiceThread extends Thread {
                 String clientCommand = in.readLine();
                 System.out.println("Client Says :" + clientCommand);
                 if (clientCommand.equalsIgnoreCase("download")) {
-
-                }
-                if (clientCommand.equalsIgnoreCase("upload")) {
-
-                }
-                else {
-
-                    File myFile = new File("//home//dikachi//Desktop//p//server//" + clientCommand);
+                    String filename = in.readLine();
+                    File myFile = new File("//home//dikachi//Desktop//p//server//" + filename);
                     byte[] mybytearray = new byte[(int) myFile.length()];
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
                     bis.read(mybytearray, 0, mybytearray.length);
                     OutputStream os = clientSocket.getOutputStream();
                     os.write(mybytearray, 0, mybytearray.length);
                     os.flush();
+                }
+                if (clientCommand.equalsIgnoreCase("upload")) {
+                    byte[] mybytearray = new byte[1024];
+                    InputStream is = clientSocket.getInputStream();
+                    String name = in.readLine();
+                    FileOutputStream fos = new FileOutputStream("//home//dikachi//Desktop//Assignment2//client//" + name);
+                    BufferedOutputStream bos = new BufferedOutputStream(fos);
+                    int bytesRead = is.read(mybytearray, 0, mybytearray.length);
+                    bos.write(mybytearray, 0, bytesRead);
+                    bos.close();
+                    clientSocket.close();
+
+                }
+                else {
                     System.out.println("didnt work");
                     out.flush();
                     clientSocket.close();
