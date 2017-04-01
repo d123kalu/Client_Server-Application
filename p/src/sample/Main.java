@@ -3,8 +3,10 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
 public class Main {
     public static void main(String[] args) throws Exception {
+
         ServerSocket m_ServerSocket = new ServerSocket(8080);
         int id = 0;
         while (true) {
@@ -28,6 +30,7 @@ class ClientServiceThread extends Thread {
     public void run() {
         System.out.println("Accepted Client : ID - " + clientID + " : Address - "
                 + clientSocket.getInetAddress().getHostName());
+        String serverpath = "//home//dikachi//Desktop//p//server";
         try {
             BufferedReader   in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             PrintWriter   out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
@@ -36,7 +39,7 @@ class ClientServiceThread extends Thread {
                 System.out.println("Client Says :" + clientCommand);
                 if (clientCommand.equalsIgnoreCase("download")) {
                     String filename = in.readLine();
-                    File myFile = new File("//home//dikachi//Desktop//p//server//" + filename);
+                    File myFile = new File(serverpath + filename);
                     byte[] mybytearray = new byte[(int) myFile.length()];
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
                     bis.read(mybytearray, 0, mybytearray.length);
@@ -48,7 +51,7 @@ class ClientServiceThread extends Thread {
                     byte[] mybytearray = new byte[1024];
                     InputStream is = clientSocket.getInputStream();
                     String name = in.readLine();
-                    FileOutputStream fos = new FileOutputStream("//home//dikachi//Desktop//Assignment2//client//" + name);
+                    FileOutputStream fos = new FileOutputStream(serverpath + name);
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
                     int bytesRead = is.read(mybytearray, 0, mybytearray.length);
                     bos.write(mybytearray, 0, bytesRead);
