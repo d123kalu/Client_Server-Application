@@ -32,7 +32,8 @@ public class Main extends Application {
     private BorderPane layout;
     ListView <String> sharedFolderLocal = new ListView<>();
     ListView <String> sharedFolderServer = new ListView<>();
-
+    String clientpath = "//home//dikachi//Desktop//Assignment2//client//";
+    String serverpath = "//home//dikachi//Desktop//p//server";
     @Override
     public void start(Stage primaryStage) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
@@ -72,7 +73,7 @@ public class Main extends Application {
                     PrintStream out = new PrintStream(sock.getOutputStream());
                     out.println("download");
                     out.println(name);
-                    FileOutputStream fos = new FileOutputStream("//home//dikachi//Desktop//Assignment2//client//" + name);
+                    FileOutputStream fos = new FileOutputStream(clientpath + name);
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
                     int bytesRead = is.read(mybytearray, 0, mybytearray.length);
                     bos.write(mybytearray, 0, bytesRead);
@@ -106,7 +107,7 @@ public class Main extends Application {
 
                     ServerSocket m_ServerSocket = new ServerSocket(8080);
                     Socket clientSocket = m_ServerSocket.accept();
-                    File myFile = new File("//home//dikachi//Desktop//Assignment2//client//" + selectedItem);
+                    File myFile = new File(clientpath + selectedItem);
                     while (true) {
                         byte[] mybytearray = new byte[(int) myFile.length()];
                         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
@@ -128,8 +129,8 @@ public class Main extends Application {
         splitPane.setPrefHeight(scene.getHeight());
 
 
-        listFileslocal("//home//dikachi//Desktop//Assignment2//client");
-        listFilesserver("//home//dikachi//Desktop//p//server");
+        listFileslocal(clientpath);
+        listFilesserver(serverpath);
 
         splitPane.getItems().addAll(sharedFolderLocal, sharedFolderServer);
         splitPane.setDividerPosition(2, 0.5);
@@ -172,7 +173,7 @@ public class Main extends Application {
         Socket sock = new Socket("127.0.0.1", 8080);
         byte[] mybytearray = new byte[1024];
         InputStream is = sock.getInputStream();
-        String name = "//home//dikachi//Desktop//sharedlocal//" + n;
+        String name = clientpath + n;
         FileOutputStream fos = new FileOutputStream(name);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
         int bytesRead = is.read(mybytearray, 0, mybytearray.length);
